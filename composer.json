@@ -1,0 +1,19 @@
+{
+    "name": "dngo-io/cover-creator",
+    "description": "PHP image generator with CSS",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Cagri S.",
+            "email": "hi@bencagri.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "simple-validator/simple-validator": "dev-master"
+    },
+    "autoload": {
+        "psr-4": { "DngoIO\\CoverCreator\\": "src/" }
+    }
+}

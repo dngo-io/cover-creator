@@ -5,7 +5,7 @@ Usage;
 First install package via composer;
 
 ```
-composer require dngo-io/cover-dreator
+composer require dngo-io/cover-creator
 ```
 
 

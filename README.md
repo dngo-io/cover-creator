@@ -18,7 +18,7 @@ require ("vendor/autoload.php");
 
 use DngoIO\CoverCreator\Generator;
 
-$selectors = [
+$text1 = [
         'font-size' => 18,  //px
         'font-type' => __DIR__ . '../assets/Roboto-Regular.ttf', //path of ttf file on server
         'text-color' => [61,183,228],
@@ -27,9 +27,26 @@ $selectors = [
         'background-url' => __DIR__ . '../assets/background.jpg' //path of the png
     ];
 
+$text2 = [
+        'font-size' => 12,  //px
+        'font-type' => __DIR__ . '../assets/Roboto-Italic.ttf', //path of ttf file on server
+        'text-color' => [61,183,228],
+        'left' => 50,
+        'top' => 30,
+    ];
 
+
+$config = [
+        'auto-center' => true,
+        'angle' => 0,
+        'header' => 'Content-type: image/jpeg',
+    ];
+  
 try {
-    $generator = new Generator("My Text On Image", $selectors);
+    $generator = new Generator();
+    $generator->setConfig($config); //or new Generator($config)
+    $generator->addLine('My First Text', $text1);
+    $generator->addLine('Second ine Text', $text2);
     $generator->generate();
 }catch (\Exception $e) {
     echo $e->getMessage();

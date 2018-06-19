@@ -3,66 +3,118 @@
 namespace DngoIO\CoverCreator;
 
 
+use DngoIO\CoverCreator\Exception\InvalidTypeException;
 use DngoIO\CoverCreator\Selectors;
+use DngoIO\CoverCreator\Selectors\SelectorValidator;
 
 class Generator
 {
 
+    /** @var array  */
     protected $selectors;
 
+    /** @var array  */
     protected $config;
 
-    protected $text;
+    /** @var array  */
+    protected $texts = [];
 
-    public function __construct($text, array $selectors = [], array $configVars = [])
+    /**
+     * Generator constructor.
+     * @param array $configVars
+     */
+    public function __construct(array $configVars = [])
     {
-        //merge selectors with default values
-        $selectors = array_merge((new Config)->getSelectors(), $selectors);
-        $this->selectors = new Selectors($selectors);
-
-        //merge config with default values
-        $this->config = array_merge((new Config)->getConfig(), $configVars);
-
-        $this->text = $text;
+        $this->setConfig($configVars);
     }
 
+    /**
+     * Generate the image
+     */
     public function generate()
     {
-
         //Set the Content Type
         header($this->config['header']);
 
-        // Create Image From Existing File
+        $image = null;
 
-        $image = imagecreatefrompng($this->selectors['background-url']);
+        foreach ($this->texts as $text => $selector) {
 
-        // Allocate A Color For The Text
-        $text_color = imagecolorallocate($image, $this->selectors['text-color'][0],$this->selectors['text-color'][1], $this->selectors['text-color'][2]);
-        $font_size = $this->selectors['font-size'];
-        $angle = $this->config['angle'];
+            // Create Image From Existing File
+            $image = imagecreatefrompng($selector['background-url']);
 
-        $text = $this->text;
-        $font_path = $this->selectors['font-type'];
+            // Allocate A Color For The Text
+            $text_color = imagecolorallocate($image, $selector['text-color'][0], $selector['text-color'][1], $selector['text-color'][2]);
+            $font_size = $selector['font-size'];
+            $angle = $this->config['angle'];
 
-        $x = $this->selectors['left'];
-        $y = $this->selectors['top'];
+            $font_path = $selector['font-type'];
 
-        if($this->config['auto-center']) {
-            $center = $this->autoCenter($image,$font_size,$angle,$font_path,$text);
-            $x = $x + $center['x'];
-            $y = $y + $center['y'];
+            $x = $selector['left'];
+            $y = $selector['top'];
+
+            if ($this->config['auto-center']) {
+                $center = $this->autoCenter($image, $font_size, $angle, $font_path, $text);
+                $x = $x + $center['x'];
+                $y = $y + $center['y'];
+            }
+
+            imagettftext($image, $font_size, $angle, $x, $y, $text_color, $font_path, $text);
+
         }
 
-        imagettftext($image, $font_size, $angle, $x, $y, $text_color, $font_path, $text);
-
         // Send Image to Browser
-        imagejpeg($image, null,95);
+        imagejpeg($image, null, 95);
 
         // Clear Memory
         imagedestroy($image);
     }
 
 
+    /**
+     * @param $text
+     * @param array $selectors
+     * @return $this
+     * @throws InvalidTypeException
+     */
+    public function addLine($text, array $selectors = [])
+    {
+        //merge selectors with default values
+        $selectors = array_merge((new Config)->getSelectors(), $selectors);
+
+        //validate selectors
+        $validator = SelectorValidator::validate($selectors,\DngoIO\CoverCreator\Selectors::$selectorRules);
+        if ($validator->isSuccess() == false) {
+            throw new InvalidTypeException(implode(',',$validator->getErrors()));
+        }
+
+        $this->texts[$text] =  $selectors;
+
+        return $this;
+
+    }
+
+    /**
+     * @param array $config
+     * @return $this
+     */
+    public function setConfig(array $config)
+    {
+        //merge config with default values
+        $this->config = array_merge((new Config)->getConfig(), $config);
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param $image
+     * @param $font_size
+     * @param $angle
+     * @param $font_path
+     * @param $text
+     * @return array
+     */
     public function autoCenter($image, $font_size, $angle, $font_path, $text)
     {
         // Get image dimensions

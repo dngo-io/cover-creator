@@ -81,6 +81,7 @@ class Generator
     {
         //merge selectors with default values
         $selectors = array_merge((new Config)->getSelectors(), $selectors);
+
         //validate selectors
         $validator = SelectorValidator::validate($selectors,\DngoIO\CoverCreator\Selectors::$selectorRules);
         if ($validator->isSuccess() == false) {

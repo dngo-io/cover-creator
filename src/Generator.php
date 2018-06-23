@@ -43,6 +43,10 @@ class Generator
 
         foreach ($this->texts as $text => $selector) {
 
+            if(isset($selector['wrap']) && is_int($selector['wrap']))
+            {
+                $text = explode("\n",wordwrap($text,20,"\n"));
+            }
             // Allocate A Color For The Text
             $text_color = imagecolorallocate($image, $selector['text-color'][0], $selector['text-color'][1], $selector['text-color'][2]);
             $font_size = $selector['font-size'];
@@ -53,13 +57,23 @@ class Generator
             $x = $selector['left'];
             $y = $selector['top'];
 
-            if ($this->config['auto-center']) {
+            if (!isset($selector['wrap']) && $this->config['auto-center']) {
                 $center = $this->autoCenter($image, $font_size, $angle, $font_path, $text);
                 $x = $x + $center['x'];
                 $y = $y + $center['y'];
             }
 
-            imagettftext($image, $font_size, $angle, $x, $y, $text_color, $font_path, $text);
+            if(is_array($text))
+            {
+                foreach($text as $line)
+                {
+                    imagettftext($image, $font_size, $angle, $x, $y, $text_color, $font_path, trim($line));
+                    $y = $y + $font_size + 18;
+
+                }
+            } else {
+                imagettftext($image, $font_size, $angle, $x, $y, $text_color, $font_path, $text);
+            }
 
         }
 

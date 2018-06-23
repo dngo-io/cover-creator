@@ -45,7 +45,7 @@ class Generator
 
             if(isset($selector['wrap']) && is_int($selector['wrap']))
             {
-                $text = explode("\n",wordwrap($text,20,"\n"));
+                $text = explode("\n",wordwrap($text,$selector['wrap'],"\n"));
             }
             // Allocate A Color For The Text
             $text_color = imagecolorallocate($image, $selector['text-color'][0], $selector['text-color'][1], $selector['text-color'][2]);

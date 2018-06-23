@@ -38,10 +38,10 @@ class Generator
 
         $image = null;
 
-        foreach ($this->texts as $text => $selector) {
+        // Create Image From Existing File
+        $image = imagecreatefrompng($this->config['background-url']);
 
-            // Create Image From Existing File
-            $image = imagecreatefrompng($selector['background-url']);
+        foreach ($this->texts as $text => $selector) {
 
             // Allocate A Color For The Text
             $text_color = imagecolorallocate($image, $selector['text-color'][0], $selector['text-color'][1], $selector['text-color'][2]);

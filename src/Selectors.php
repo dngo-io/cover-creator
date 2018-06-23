@@ -14,7 +14,6 @@ class Selectors
         'text-color' => ['rgb'], // RGB as array
         'left' => ['integer'],
         'top' => ['integer'],
-        'background-url' => ['file'] //path of the png
     ];
 
 }

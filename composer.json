@@ -9,9 +9,12 @@
             "email": "hi@bencagri.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "simple-validator/simple-validator": "1.0.2"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "~1.6"
     },
     "autoload": {
         "psr-4": { "DngoIO\\CoverCreator\\": "src/" }

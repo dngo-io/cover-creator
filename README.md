@@ -64,7 +64,7 @@ try {
 |  text-color |  array |  text color as RGB |
 |  left |  integer |  Margin Left value of text |
 |  top |  integer |  Margin Top value of text |
-|  background-url |  file |  Backgroun file on the server. Exact path and file name. Should be PNG or JPG |
+|  wrap (optional) |  integer | Integer value to wrap text. If disables *auto-center* selector.  |
 
 
 ### Availabile Config Values
@@ -75,7 +75,11 @@ the ``Generator`` class takes third parameter as configs.
 |   auto-center   |  bool  | Enable text center on image |
 |   angle   | integer |Angle of the text on image |
 |   header  | string | default value of header when image generated. default is  ``Content-type: image/jpeg`` |
+|   background-url |  file |  Background file on the server. Exact path and file name. Should be PNG or JPG |
 
+```
+Important: If you wrap the line, auto-center is forced to false.
+```
 
 ### Error Handling
 

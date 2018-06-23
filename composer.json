@@ -7,11 +7,18 @@
         {
             "name": "Cagri S.",
             "email": "hi@bencagri.com"
+        },
+        {
+            "name": "Burak",
+            "email": "burak@myself.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "simple-validator/simple-validator": "1.0.2"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "~1.6"
     },
     "autoload": {
         "psr-4": { "DngoIO\\CoverCreator\\": "src/" }
